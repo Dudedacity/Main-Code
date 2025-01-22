@@ -6,8 +6,8 @@ extern Drive chassis;
 ///
 // Ports and Devices
 ///
-inline Piston doinker('h', false);
-inline Piston mogo_clamp('g', true);
+inline Piston doinker('g', false);
+inline Piston mogo_clamp('h', true);
 
 ///
 // Functions

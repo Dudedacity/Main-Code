@@ -17,7 +17,7 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
+  chassis.pid_turn_constants_set(5.0, 0.05, 50.0, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.8, 0.0, 32.5);  // Angular control for boomerang motions
@@ -52,21 +52,13 @@ void default_constants() {
 // Skills
 ///
 void skills() {
-  chassis.drive_angle_set(135_deg);
-  
-  chassis.pid_drive_set(6_in, 50);
-  chassis.pid_wait_until(2_in);
-  chassis.pid_speed_max_set(DRIVE_SPEED);
+  chassis.drive_angle_set(112.5_deg);
+  chassis.odom_xyt_set(-58.5_in, -16.1_in, 112.5_deg);
 
-  set_mogo_clamp(true);
-  intake_spin(true);
+  chassis.pid_odom_set({{0_in, 24_in}, fwd, DRIVE_SPEED}, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
 
-  chassis.pid_drive_set(1.6_tile, DRIVE_SPEED);
-  chassis.pid_wait();
 
 }
 
@@ -98,7 +90,7 @@ void turn_example() {
   // The first parameter is the target in degrees
   // The second parameter is max speed the robot will drive at
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_set(45_deg, TURN_SPEED);
@@ -402,8 +394,10 @@ void measure_offsets() {
 ///
 void test_func() {
   
-  lift_auto(50);
-  pros::delay(500);
-  lift_auto(0);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
 
 }

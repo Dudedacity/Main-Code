@@ -10,9 +10,9 @@ extern Drive chassis;
 ///
 // Lift Motors and Sensors
 ///
-inline pros::Motor lift_l(1);
-inline pros::Motor lift_r(-2);
-inline pros::Rotation lift_rotation(3);
+inline pros::Motor lift_l(17);
+inline pros::Motor lift_r(-3);
+inline pros::Rotation lift_rotation(15);
 
 /// 
 // PID group setup

@@ -8,12 +8,12 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {7, 10, 9},     // Left Chassis Ports (negative port will reverse it!)
-    {-19, -2, -14},  // Right Chassis Ports (negative port will reverse it!)
+    {-7, -2, -9},     // Left Chassis Ports (negative port will reverse it!)
+    {19, 12, 14},  // Right Chassis Ports (negative port will reverse it!)
 
-    0,      // IMU Port
+    11,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    450);   // Wheel RPM = 1_6 * (36 / 48)
+    450.0);   // Wheel RPM = 1_6 * (36 / 48)
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -59,7 +59,7 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       {"Test PID Motor\n\nSpins a motor using PID 180 degrees and then back to 0 after waiting 1 second.", test_func},
-      //{"Drive\n\nDrive forward and come back", drive_example},
+      {"Drive\n\nDrive forward and come back", drive_example},
       //{"Turn\n\nTurn 3 times.", turn_example},
       //{"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       //{"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -83,6 +83,9 @@ void initialize() {
   // Initialize single motor PID tester
   lift_rotation.reset_position();
   liftPID.exit_condition_set(80, 50, 300, 150, 500, 500);
+
+  set_mogo_clamp(false);
+  set_doinker(false);
 }
 
 /**
@@ -140,7 +143,7 @@ void autonomous() {
 
   
 
-  // ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+  ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
 /**
@@ -237,11 +240,13 @@ void ez_template_extras() {
  * Tank control function for drivetrain while allowing for changing of
  * speed values later on. Also, if B is held down while driving, the max speed of the drive is only 50%
  */
+
+
 int drive_speed = 100;
 void opcontrol_tank() {
   chassis.drive_set(
-    {master.get_analog(ANALOG_LEFT_Y)*drive_speed}, 
-    {master.get_analog(ANALOG_RIGHT_Y)*drive_speed}
+    {master.get_analog(ANALOG_LEFT_Y)}, 
+    {master.get_analog(ANALOG_RIGHT_Y)}
     );
 }
 void slow_drive() {
@@ -270,6 +275,8 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
+  skills();
+
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
@@ -280,7 +287,11 @@ void opcontrol() {
     opcontrol_intake(); // intake.cpp
     opcontrol_mogo_clamp(); // pnumatics.cpp
     opcontrol_doinker(); // pnumatics.cpp
-    opcontrol_lift(); // lift.cpp
+    //opcontrol_lift(); // lift.cpp
+
+    if (ez::as::page_blank_is_on(2)) {
+    ez::screen_print("heading: " + util::to_string_with_precision(chassis.imu.get_heading()), 1);
+    }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
