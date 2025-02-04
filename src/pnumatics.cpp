@@ -12,6 +12,7 @@ void opcontrol_doinker() {
     doinker.button_toggle(master.get_digital_new_press(DIGITAL_Y));
 }
 
+bool value = false;
 void set_mogo_clamp(bool value) {
     if (value == true) {
         mogo_clamp.set(true);
@@ -22,4 +23,6 @@ void set_mogo_clamp(bool value) {
 }
 void opcontrol_mogo_clamp() {
     mogo_clamp.button_toggle(master.get_digital_new_press(DIGITAL_X));
+
+    
 }

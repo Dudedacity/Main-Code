@@ -60,6 +60,8 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       {"Test PID Motor\n\nSpins a motor using PID 180 degrees and then back to 0 after waiting 1 second.", test_func},
       {"Drive\n\nDrive forward and come back", drive_example},
+      {"Skills\n\nSkills routine", skills},
+      {"Calculate Inertial Sensor Offsets\n\nits in the name ykwim", inertialOffset},
       //{"Turn\n\nTurn 3 times.", turn_example},
       //{"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       //{"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -72,7 +74,7 @@ void initialize() {
       //{"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
       //{"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
       //{"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      //{"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
@@ -82,10 +84,12 @@ void initialize() {
 
   // Initialize single motor PID tester
   lift_rotation.reset_position();
+  //lift_auto(0);
   liftPID.exit_condition_set(80, 50, 300, 150, 500, 500);
 
-  set_mogo_clamp(false);
+  set_mogo_clamp(true);
   set_doinker(false);
+  //liftPID.target_set(0);
 }
 
 /**
@@ -144,6 +148,8 @@ void autonomous() {
   
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+  //inertialOffset();
+
 }
 
 /**
@@ -175,7 +181,8 @@ void ez_screen_task() {
           // Display X, Y, and Theta
           ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
                                "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
-                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
+                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()) +
+                               "\nlift rotation: " + util::to_string_with_precision(lift_rotation.get_position() / 100.0),
                            1);  // Don't override the top Page line
 
           // Display all trackers that are being used
@@ -215,8 +222,8 @@ void ez_template_extras() {
     //  When enabled:
     //  * use A and Y to increment / decrement the constants
     //  * use the arrow keys to navigate the constants
-    if (master.get_digital_new_press(DIGITAL_X))
-      chassis.pid_tuner_toggle();
+    //if (master.get_digital_new_press(DIGITAL_A))
+      //chassis.pid_tuner_toggle();
 
     // Trigger the selected autonomous routine
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
@@ -242,19 +249,19 @@ void ez_template_extras() {
  */
 
 
-int drive_speed = 100;
+int drive_speed = 127;
 void opcontrol_tank() {
   chassis.drive_set(
-    {master.get_analog(ANALOG_LEFT_Y)}, 
-    {master.get_analog(ANALOG_RIGHT_Y)}
+    {master.get_analog(ANALOG_LEFT_Y) * (drive_speed/127)},
+    {master.get_analog(ANALOG_RIGHT_Y) * (drive_speed/127)}
     );
 }
 void slow_drive() {
   if (master.get_digital(DIGITAL_B)) {
-      drive_speed = 50;
+      drive_speed = 64;
     }
-    else {
-      drive_speed = 100;
+  else {
+      drive_speed = 127;
     }
 }
 
@@ -275,7 +282,7 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
-  skills();
+  //skills();
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -287,11 +294,7 @@ void opcontrol() {
     opcontrol_intake(); // intake.cpp
     opcontrol_mogo_clamp(); // pnumatics.cpp
     opcontrol_doinker(); // pnumatics.cpp
-    //opcontrol_lift(); // lift.cpp
-
-    if (ez::as::page_blank_is_on(2)) {
-    ez::screen_print("heading: " + util::to_string_with_precision(chassis.imu.get_heading()), 1);
-    }
+    opcontrol_lift(); // lift.cpp
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
