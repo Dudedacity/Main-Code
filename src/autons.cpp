@@ -53,6 +53,7 @@ void default_constants() {
 // Skills
 ///
 void skills() {
+<<<<<<< HEAD
   //initialize
   chassis.slew_drive_forward_set(true);
   chassis.slew_drive_backward_set(true);
@@ -69,6 +70,12 @@ void skills() {
   chassis.pid_wait();
   
   chassis.pid_odom_set({{-47_in, -59_in}, fwd, 70});
+=======
+  chassis.slew_drive_set(true);
+  chassis.odom_xyt_set(-58.5_in, -16.1_in, 112.5_deg);
+
+  chassis.pid_odom_set({{0_in, 24_in}, fwd, DRIVE_SPEED});
+>>>>>>> c3833b55eabb49e3f72ae896a325db127366cbaf
   chassis.pid_wait();
 
   pros::delay(500);
