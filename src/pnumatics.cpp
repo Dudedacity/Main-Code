@@ -15,10 +15,10 @@ void opcontrol_doinker() {
 bool value = false;
 void set_mogo_clamp(bool value) {
     if (value == true) {
-        mogo_clamp.set(true);
+        mogo_clamp.set(false);
     }
     else {
-        mogo_clamp.set(false);
+        mogo_clamp.set(true);
     }
 }
 void opcontrol_mogo_clamp() {

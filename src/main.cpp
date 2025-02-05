@@ -87,7 +87,7 @@ void initialize() {
   //lift_auto(0);
   liftPID.exit_condition_set(80, 50, 300, 150, 500, 500);
 
-  set_mogo_clamp(true);
+  set_mogo_clamp(false);
   set_doinker(false);
   //liftPID.target_set(0);
 }

@@ -17,7 +17,7 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(5.0, 0.1, 50.0, 15.0);     // Turn in place constants
+  chassis.pid_turn_constants_set(5.0, 0.1, 30.0, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.8, 0.0, 32.5);  // Angular control for boomerang motions
@@ -46,14 +46,13 @@ void default_constants() {
   chassis.odom_boomerang_dlead_set(0.625);     // This handles how aggressive the end of boomerang motions are
 
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
-  chassis.drive_imu_scaler_set(1.03);
+  //chassis.drive_imu_scaler_set(1.03);
 }
 
 ///
 // Skills
 ///
 void skills() {
-<<<<<<< HEAD
   //initialize
   chassis.slew_drive_forward_set(true);
   chassis.slew_drive_backward_set(true);
@@ -61,7 +60,9 @@ void skills() {
   set_mogo_clamp(false);
 
   //main tasks
+  /*
   chassis.pid_odom_set({{-47_in, -23.5_in}, rev, 64});
+  liftPID.target_set(40);
   chassis.pid_wait();
   set_mogo_clamp(true);
   intake_spin(127);
@@ -70,12 +71,6 @@ void skills() {
   chassis.pid_wait();
   
   chassis.pid_odom_set({{-47_in, -59_in}, fwd, 70});
-=======
-  chassis.slew_drive_set(true);
-  chassis.odom_xyt_set(-58.5_in, -16.1_in, 112.5_deg);
-
-  chassis.pid_odom_set({{0_in, 24_in}, fwd, DRIVE_SPEED});
->>>>>>> c3833b55eabb49e3f72ae896a325db127366cbaf
   chassis.pid_wait();
 
   pros::delay(500);
@@ -96,6 +91,52 @@ void skills() {
   chassis.pid_wait(); 
 
   pros::delay(2000);
+  */
+
+  chassis.pid_drive_set(-15_in, 64, true);
+  liftPID.target_set(40);
+  chassis.pid_wait_until(9_in);
+  set_mogo_clamp(true);
+  intake_spin(127);
+  chassis.pid_speed_max_set(DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(35_in, DRIVE_SPEED, true);
+  chassis.pid_wait_until(15_in);
+  chassis.pid_speed_max_set(50);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-35_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(215_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(20_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(73_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(38_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(195_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  pros::delay(250);
+
+  chassis.pid_turn_set(80_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-40_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
 }
 
 ///
