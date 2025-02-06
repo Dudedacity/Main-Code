@@ -58,7 +58,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Test PID Motor\n\nSpins a motor using PID 180 degrees and then back to 0 after waiting 1 second.", test_func},
+      {"Test PID Motor\n\nSpins a motor using PID 180 degrees and then back to 0 after waiting 1 second.", blueNegative},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Skills\n\nSkills routine", skills},
       {"Calculate Inertial Sensor Offsets\n\nits in the name ykwim", inertialOffset},

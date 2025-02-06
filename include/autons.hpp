@@ -3,6 +3,10 @@
 void default_constants();
 
 void skills();
+void redNegative();
+void redPositive();
+void bluePositive();
+void blueNegative();
 void inertialOffset();
 void drive_example();
 void turn_example();
