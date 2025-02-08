@@ -11,7 +11,7 @@ ez::Drive chassis(
     {-7, -2, -9},     // Left Chassis Ports (negative port will reverse it!)
     {19, 12, 14},  // Right Chassis Ports (negative port will reverse it!)
 
-    11,      // IMU Port
+    5,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450.0);   // Wheel RPM = 1_6 * (36 / 48)
 
@@ -58,10 +58,13 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Test PID Motor\n\nSpins a motor using PID 180 degrees and then back to 0 after waiting 1 second.", blueNegative},
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Skills\n\nSkills routine", skills},
-      {"Calculate Inertial Sensor Offsets\n\nits in the name ykwim", inertialOffset},
+      {"Blue Negative", blueNegative},
+      {"Red Negative", redNegative},
+      {"Blue Positive", bluePositive},
+      {"Red Positive", redPositive},
+      //{"Drive\n\nDrive forward and come back", drive_example},
+      {"Skills\n\nSkills routine", skills}
+      //{"Calculate Inertial Sensor Offsets\n\nits in the name ykwim", inertialOffset},
       //{"Turn\n\nTurn 3 times.", turn_example},
       //{"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       //{"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -74,7 +77,7 @@ void initialize() {
       //{"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
       //{"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
       //{"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      //{"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
