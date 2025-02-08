@@ -58,41 +58,8 @@ void skills() {
   chassis.slew_drive_backward_set(true);
   chassis.odom_xyt_set(-58.5_in, -16.1_in, 305_deg);
   set_mogo_clamp(false);
-
-  //main tasks
-  /*
-  chassis.pid_odom_set({{-47_in, -23.5_in}, rev, 64});
-  liftPID.target_set(40);
-  chassis.pid_wait();
-  set_mogo_clamp(true);
-  intake_spin(127);
-
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
   
-  chassis.pid_odom_set({{-47_in, -59_in}, fwd, 70});
-  chassis.pid_wait();
-
-  pros::delay(500);
-
-  chassis.pid_odom_set({{-47_in, -27.5_in}, rev, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  chassis.pid_odom_set({{-58.8_in, -47_in}, fwd, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  chassis.pid_odom_set({{-23.7_in, -47_in}, fwd, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  chassis.pid_odom_set({{-23.7_in, -24_in}, fwd, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  chassis.pid_odom_set({{-57_in, -57_in, 45_deg}, rev, DRIVE_SPEED});
-  chassis.pid_wait(); 
-
-  pros::delay(2000);
-  */
-
+  //main tasks
   chassis.pid_drive_set(-15_in, 64, true);
   liftPID.target_set(40);
   chassis.pid_wait_until(9_in);
