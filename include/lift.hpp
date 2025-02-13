@@ -12,7 +12,7 @@ extern Drive chassis;
 ///
 inline pros::Motor lift_l(-17);
 inline pros::Motor lift_r(3);
-inline pros::Rotation lift_rotation(15);
+inline pros::Rotation lift_rotation(8);
 
 /// 
 // PID group setup

@@ -52,7 +52,7 @@ void opcontrol_lift() {
       state = 1;
     }
     else if (state == 1) {
-      liftPID.target_set(170);
+      liftPID.target_set(190);
       master.rumble("...");
       state = 2;
     }

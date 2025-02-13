@@ -128,9 +128,11 @@ void skills() {
   pros::delay(150);
   intake_spin(127);
   pros::delay(250);
+  intake_spin(-32);
 
   chassis.pid_drive_set(5_in, 64, true);
   chassis.pid_wait();
+  intake_spin(0);
 
   liftPID.target_set(160);
   pros::delay(1000);
@@ -139,6 +141,8 @@ void skills() {
   chassis.pid_wait_until(5_in);
   liftPID.target_set(40);
   chassis.pid_wait();
+
+  return
 
   chassis.pid_turn_set(75_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -183,11 +187,11 @@ void redNegative() {
   chassis.pid_wait();
   liftPID.target_set(40);
 
-  chassis.pid_turn_set(10_deg, TURN_SPEED);
+  chassis.pid_turn_set(5_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-30_in, DRIVE_SPEED, true);
-  chassis.pid_wait_until(-18_in);
+  chassis.pid_drive_set(-32_in, DRIVE_SPEED, true);
+  chassis.pid_wait_until(-12_in);
   chassis.pid_speed_max_set(40);
   chassis.pid_wait();
   set_mogo_clamp(true);
@@ -196,29 +200,32 @@ void redNegative() {
   chassis.pid_wait();
   intake_spin(127);
 
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(22_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  intake_spin(0);
+
+  chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(185_deg, TURN_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
+  intake_spin(127);
 
-  chassis.pid_drive_set(16_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(14_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   pros::delay(150);
 
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-14_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(270_deg, TURN_SPEED);
+  chassis.pid_turn_set(215_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  liftPID.target_set(150);
-
-  pros::delay(600);
+  pros::delay(1000);
 }
 
 ///
@@ -352,7 +359,7 @@ void blueNegative() {
   chassis.pid_drive_set(22_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(150_deg, TURN_SPEED);
+  chassis.pid_turn_set(145_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(15_in, DRIVE_SPEED, true);
