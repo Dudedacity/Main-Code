@@ -11,7 +11,7 @@ ez::Drive chassis(
     {-7, -2, -9},     // Left Chassis Ports (negative port will reverse it!)
     {19, 12, 14},  // Right Chassis Ports (negative port will reverse it!)
 
-    5,      // IMU Port
+    11,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450.0);   // Wheel RPM = 1_6 * (36 / 48)
 
@@ -21,7 +21,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(18, 2.905, 0.23);   // This tracking wheel is parallel to the drive wheels
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -42,7 +42,7 @@ void initialize() {
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_left_set(&vert_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
@@ -62,8 +62,9 @@ void initialize() {
       {"Red Negative", redNegative},
       {"Blue Positive", bluePositive},
       {"Red Positive", redPositive},
+      {"Testing\n\nThis is a test routine", testing},
       //{"Drive\n\nDrive forward and come back", drive_example},
-      {"Skills\n\nSkills routine", skills}
+      {"Skills\n\nSkills routine", skills},
       //{"Calculate Inertial Sensor Offsets\n\nits in the name ykwim", inertialOffset},
       //{"Turn\n\nTurn 3 times.", turn_example},
       //{"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -73,11 +74,11 @@ void initialize() {
       //{"Combine all 3 movements", combining_movements},
       //{"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
       //{"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      //{"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
+      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
       //{"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
       //{"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
       //{"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      //{"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
@@ -87,7 +88,7 @@ void initialize() {
 
   // Initialize single motor PID tester
   lift_rotation.reset_position();
-  //lift_auto(0);
+  liftPID.target_set(0);
   liftPID.exit_condition_set(80, 50, 300, 150, 500, 500);
 
   set_mogo_clamp(false);
@@ -182,12 +183,12 @@ void ez_screen_task() {
         // If we're on the first blank page...
         if (ez::as::page_blank_is_on(0)) {
           // Display X, Y, and Theta
-          ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
-                               "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
-                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()) +
-                               "\nlift rotation: " + util::to_string_with_precision(lift_rotation.get_position() / 100.0),
-                           1);  // Don't override the top Page line
-
+          //ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
+          //                     "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
+          //                     "\na: " + util::to_string_with_precision(chassis.odom_theta_get()) +
+          //                     "\nlift rotation: " + util::to_string_with_precision(lift_rotation.get_position() / 100.0),
+          //                 1);  // Don't override the top Page line
+          //ez::screen_print("Tracker: " + to_string(vert_tracker.get()), 2);
           // Display all trackers that are being used
           screen_print_tracker(chassis.odom_tracker_left, "l", 4);
           screen_print_tracker(chassis.odom_tracker_right, "r", 5);
@@ -298,6 +299,14 @@ void opcontrol() {
     opcontrol_mogo_clamp(); // pnumatics.cpp
     opcontrol_doinker(); // pnumatics.cpp
     opcontrol_lift(); // lift.cpp
+
+    if (master.get_digital(DIGITAL_DOWN)) {
+      chassis.drive_sensor_reset();
+    }
+
+    if (ez::as::page_blank_is_on(0)) {
+      ez::screen_print(to_string(vert_tracker.get()), 1);
+    }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

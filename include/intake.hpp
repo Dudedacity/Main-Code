@@ -9,7 +9,7 @@ extern Drive chassis;
 ///
 inline Motor intakeL(6);
 inline Motor intakeR(-20);
-inline Distance intakeMotors_distance(18);
+inline Distance intakeMotors_distance(15);
 
 ///
 // Constants

@@ -27,3 +27,4 @@ void set_lift(int value);
 void opcontrol_lift();
 void lift_task();
 void lift_wait();
+void lift_down();

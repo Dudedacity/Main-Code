@@ -13,6 +13,7 @@ void intake_spin(int value) {
 // Intake until Ring is Detected in Robot
 // - Keeps the intake spinning until a ring is detected by the distance sensor in the bot
 ///
+
 void intake_single_ring() {
     intake_spin(127);
     while (true) {

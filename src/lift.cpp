@@ -64,3 +64,9 @@ void opcontrol_lift() {
   }
   //lift_l.set
 }
+
+// put lady brown all the way down to go under the bar
+void lift_down() {
+  liftPID.target_set(200);
+  lift_wait();
+}
